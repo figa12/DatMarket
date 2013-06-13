@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using QuickGraph;
+using QuickGraph.Algorithms;
+
 
 namespace DatMarket
 {
@@ -10,11 +13,8 @@ namespace DatMarket
     {
         int GetRoute(int from, int target)
         {
-            Console.WriteLine("Getting Database, please be patient.");
             // Get the graph from the database.
             BidirectionalGraph<int, Edge<int>> graph = GetGraph();
- 
-            Console.WriteLine("Database downloaded.");
  
             // Calculate the shortest route with a constant length.
             var dijkstra = graph.ShortestPathsDijkstra((e => 1), from);
@@ -30,14 +30,7 @@ namespace DatMarket
                 foreach (var edge in path)
                 {
                     jumpCounter++;
-                    Console.WriteLine(edge);
                 }
- 
-            else
-                Console.WriteLine("No route found.");
- 
-            Console.ReadLine();
-            Console.Clear();
  
             return jumpCounter;
         }
