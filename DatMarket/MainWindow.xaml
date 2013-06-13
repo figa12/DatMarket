@@ -4,8 +4,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <TextBox x:Name="tLog" HorizontalAlignment="Left" Height="197" Margin="10,113,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="497" IsReadOnly="True"/>
-        <ProgressBar x:Name="progressBarSell" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="460" Margin="28,23,0,0" RenderTransformOrigin="0.498,1.636"/>
-        <ProgressBar x:Name="progressBarBuy" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="460" Margin="28,50,0,0" RenderTransformOrigin="0.498,1.636"/>
+        <ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="460" Margin="28,50,0,0" RenderTransformOrigin="0.498,1.636"/>
 
     </Grid>
 </Window>

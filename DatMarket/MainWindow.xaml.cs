@@ -61,12 +61,14 @@ namespace DatMarket
         {
             if (Orders.SellOrders.Count == sellOrderItems && Orders.BuyOrders.Count == buyOrderItems)
             {
-                t.Stop();
                 Orders.connectionBuy.Close();
                 Orders.connectionSell.Close();
+                t.Stop();
+                tLog.AppendText(string.Format("Finished loading: {0} sell orders and {1} buy orders.", sellOrderItems, buyOrderItems));
+                progressBar.Visibility = Visibility.Hidden;
+                
             }
-            progressBarSell.Value = (int)(((double)Orders.SellOrders.Count / (double)sellOrderItems) * 100);
-            progressBarBuy.Value = (int)(((double)Orders.BuyOrders.Count / (double)buyOrderItems) * 100);
+            progressBar.Value = (int)(((double)(Orders.SellOrders.Count + Orders.BuyOrders.Count) / (double)(sellOrderItems + buyOrderItems)) * 100);
         }
 
 
