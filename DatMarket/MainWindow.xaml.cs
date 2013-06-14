@@ -30,7 +30,7 @@ namespace DatMarket
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         DispatcherTimer t = new DispatcherTimer();
         private int sellOrderItems;
@@ -40,20 +40,22 @@ namespace DatMarket
         public MainWindow()
         {
             InitializeComponent();
-            //getData();
+
+            // Route Tester.
+            Route route = JumpGraph.GetRoute(30003498, 30000142, -1);
 
             Orders.connectionBuy.Open();
             Orders.connectionSell.Open();
             sellOrderItems = mysql.getItemCount("sell_orders");
             buyOrderItems = mysql.getItemCount("buy_orders");
 
-            Thread sellThread = new Thread(new ThreadStart(mysql.getDataSell));
+            Thread sellThread = new Thread((mysql.getDataSell));
             sellThread.Start();
-            Thread buyThread = new Thread(new ThreadStart(mysql.getDataBuy));
+            Thread buyThread = new Thread((mysql.getDataBuy));
             buyThread.Start();
 
             t.Interval = new TimeSpan(0, 0, 1);
-            t.Tick += new EventHandler(TOnElapsed);
+            t.Tick += TOnElapsed;
             t.Start();
         }
 
