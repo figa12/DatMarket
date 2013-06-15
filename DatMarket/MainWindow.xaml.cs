@@ -42,7 +42,7 @@ namespace DatMarket
             InitializeComponent();
 
             // Route Tester.
-            Route route = JumpGraph.GetRoute(30003498, 30000142, -1);
+            Route route = JumpGraph.GetRoute(30003498, 30000142, 1);
 
             Orders.connectionBuy.Open();
             Orders.connectionSell.Open();

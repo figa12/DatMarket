@@ -39,8 +39,7 @@ namespace DatMarket
         // Creates a graph from a database.
         private static BidirectionalGraph<int, Edge<int>> GetGraph(double minSecurity)
         {
-            string connectionString = "server=78.129.218.62;" + "database=eve;" + "uid=eve;" + "password=eve;";
-            MySqlConnection connection = new MySqlConnection(connectionString);
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
             connection.Open();
 
             // Sql Query to get info from the database and start the reader.
@@ -81,8 +80,7 @@ namespace DatMarket
 
         private static List<int> allowedSecurityList(double minSecurity)
         {
-            string connectionString = "server=78.129.218.62;" + "database=eve;" + "uid=eve;" + "password=eve;";
-            MySqlConnection connection = new MySqlConnection(connectionString);
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
             connection.Open();
 
             // Sql Query to get info from the database and start the reader.
