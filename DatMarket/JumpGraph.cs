@@ -11,16 +11,16 @@ namespace DatMarket
 {
     public static class JumpGraph
     {
-        public static Route GetRoute(int from, int target, double minSecurity)
+        public static Route GetRoute(uint from, uint target, double minSecurity)
         {
             // Get the graph from the database.
-            BidirectionalGraph<int, Edge<int>> graph = GetGraph(minSecurity);
+            BidirectionalGraph<uint, Edge<uint>> graph = GetGraph(minSecurity);
 
             // Calculate the shortest route with a constant length.
             var dijkstra = graph.ShortestPathsDijkstra((e => 1), from);
 
             // Query path for given vertices.
-            IEnumerable<Edge<int>> path;
+            IEnumerable<Edge<uint>> path;
 
             // Count the amount of jumps.
             int jumpCounter = 0;
@@ -37,7 +37,7 @@ namespace DatMarket
         }
 
         // Creates a graph from a database.
-        private static BidirectionalGraph<int, Edge<int>> GetGraph(double minSecurity)
+        private static BidirectionalGraph<uint, Edge<uint>> GetGraph(double minSecurity)
         {
             MySqlConnection connection = new MySqlConnection(Orders.conStr);
             connection.Open();
@@ -48,17 +48,17 @@ namespace DatMarket
             MySqlDataReader reader = cmd.ExecuteReader();
 
             // Create an empty graph and an empty edge list.
-            BidirectionalGraph<int, Edge<int>> graph = new BidirectionalGraph<int, Edge<int>>();
+            BidirectionalGraph<uint, Edge<uint>> graph = new BidirectionalGraph<uint, Edge<uint>>();
             // (This is because edges cannot be made to vertexes that doesn't exist.)
-            List<Edge<int>> tempEdges = new List<Edge<int>>();
+            List<Edge<uint>> tempEdges = new List<Edge<uint>>();
 
-            List<int> allowedSecurityList = JumpGraph.allowedSecurityList(minSecurity);
+            List<uint> allowedSecurityList = JumpGraph.allowedSecurityList(minSecurity);
 
             // Read all database info into the variables.
             while (reader.Read())
             {
-                int tempVertex = int.Parse(reader[0].ToString());
-                int tempEdge = int.Parse(reader[1].ToString());
+                uint tempVertex = uint.Parse(reader[0].ToString());
+                uint tempEdge = uint.Parse(reader[1].ToString());
 
                 if (!graph.Vertices.Contains(tempVertex))
                 {
@@ -66,7 +66,7 @@ namespace DatMarket
                 }
 
                 if (allowedSecurityList.Contains(tempEdge))
-                    tempEdges.Add(new Edge<int>(tempVertex, tempEdge));
+                    tempEdges.Add(new Edge<uint>(tempVertex, tempEdge));
             }
 
             // Add the edges to the graph.
@@ -75,10 +75,12 @@ namespace DatMarket
                 graph.AddEdge(tempEdge);
             }
 
+            connection.Close();
+
             return graph;
         }
 
-        private static List<int> allowedSecurityList(double minSecurity)
+        private static List<uint> allowedSecurityList(double minSecurity)
         {
             MySqlConnection connection = new MySqlConnection(Orders.conStr);
             connection.Open();
@@ -88,17 +90,19 @@ namespace DatMarket
             MySqlCommand cmd = new MySqlCommand(cmdText, connection);
             MySqlDataReader reader = cmd.ExecuteReader();
 
-            List<int> tempSecurityList = new List<int>();
+            List<uint> tempSecurityList = new List<uint>();
 
             // Read all database info into the variables.
             while (reader.Read())
             {
-                int tempSolarSystemID = int.Parse(reader[0].ToString());
+                uint tempSolarSystemID = uint.Parse(reader[0].ToString());
                 double tempSystemSecurityLevel = double.Parse(reader[1].ToString());
 
                 if (tempSystemSecurityLevel >= minSecurity)
                     tempSecurityList.Add(tempSolarSystemID);
             }
+
+            connection.Close();
 
             return tempSecurityList;
         }
