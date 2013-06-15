@@ -40,7 +40,7 @@ namespace DatMarket
         public MainWindow()
         {
             InitializeComponent();
-            //getData();
+            
 
             Orders.connectionBuy.Open();
             Orders.connectionSell.Open();
@@ -68,6 +68,12 @@ namespace DatMarket
             progressBarSell.Value = (int)(((double)Orders.SellOrders.Count / (double)sellOrderItems) * 100);
             progressBarBuy.Value = (int)(((double)Orders.BuyOrders.Count / (double)buyOrderItems) * 100);
         }
+
+        private void setupGUI()
+        {
+
+        }
+        
 
 
     }

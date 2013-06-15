@@ -1,11 +1,35 @@
-﻿<Window x:Class="DatMarket.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <TextBox x:Name="tLog" HorizontalAlignment="Left" Height="197" Margin="10,113,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="497" IsReadOnly="True"/>
-        <ProgressBar x:Name="progressBarSell" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="460" Margin="28,23,0,0" RenderTransformOrigin="0.498,1.636"/>
-        <ProgressBar x:Name="progressBarBuy" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="460" Margin="28,50,0,0" RenderTransformOrigin="0.498,1.636"/>
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="MainWindow1" x:Class="DatMarket.MainWindow"
+        Title="MainWindow" Height="518.333" Width="802.667">
+    <Grid UseLayoutRounding="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="266*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="167"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="tLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="0,0" TextWrapping="Wrap" Text="TextBox" IsReadOnly="True" RenderTransformOrigin="0.5,0.5" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.083"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <ProgressBar x:Name="progressBarSell" Margin="0,10,0,0" RenderTransformOrigin="0.498,1.636" Grid.Row="1" Grid.Column="1" Height="10" VerticalAlignment="Top"/>
+        <ProgressBar x:Name="progressBarBuy" RenderTransformOrigin="0.498,1.636" Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" Height="10" VerticalAlignment="Top"/>
+        <Label Content="SellOrders" Grid.Row="1"/>
+        <Label Content="BuyOrders" Grid.Row="2"/>
+        <ComboBox x:Name="systemCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="157" Margin="0,42,0,0" IsEditable="True" IsReadOnly="True"/>
+        <Label Content="System" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
 
     </Grid>
 </Window>
