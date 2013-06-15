@@ -82,7 +82,13 @@ namespace DatMarket
             set { _dateCreated = value; }
         }
 
-        public Order(uint orderId, uint typeId, uint stationId, uint solarsystemId, uint regionId, float price, int distance, uint qtyTotal, uint qtyAvailable, uint qtyMinimum, DateTime dateIssued, DateTime dateExpires, DateTime dateCreated)
+        public double Volume
+        {
+            get { return _volume; }
+            set { _volume = value; }
+        }
+
+        public Order(uint orderId, uint typeId, uint stationId, uint solarsystemId, uint regionId, float price, int distance, uint qtyTotal, uint qtyAvailable, uint qtyMinimum, DateTime dateIssued, DateTime dateExpires, DateTime dateCreated, double volume)
         {
             _orderId = orderId;
             _typeId = typeId;
@@ -97,6 +103,7 @@ namespace DatMarket
             _dateIssued = dateIssued;
             _dateExpires = dateExpires;
             _dateCreated = dateCreated;
+            _volume = volume;
         }
 
         private uint _orderId;
@@ -112,6 +119,7 @@ namespace DatMarket
         private DateTime _dateIssued;
         private DateTime _dateExpires;
         private DateTime _dateCreated;
+        private double _volume;
 
 
     }
