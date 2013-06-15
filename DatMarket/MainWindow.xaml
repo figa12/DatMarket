@@ -30,6 +30,5 @@
         <Label Content="BuyOrders" Grid.Row="2"/>
         <ComboBox x:Name="systemCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="157" Margin="0,42,0,0" IsEditable="True" IsReadOnly="True"/>
         <Label Content="System" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
-
     </Grid>
 </Window>
