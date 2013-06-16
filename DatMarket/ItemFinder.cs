@@ -20,11 +20,11 @@ namespace DatMarket
              */
             foreach (var buyOrder in Orders.BuyOrders)
             {
-                if (buyOrder.QtyAvailable * buyOrder.Volume >= shipSpace && buyOrder.QtyMinimum * buyOrder.Volume <= shipSpace && buyOrder.Price * buyOrder.QtyMinimum * buyOrder.Volume <= maxPrice)
+                if (buyOrder.QtyAvailable * buyOrder.Volume >= shipSpace && buyOrder.QtyMinimum * buyOrder.Volume <= shipSpace && buyOrder.Price * buyOrder.QtyMinimum <= maxPrice)
                 {
                     foreach (var sellOrder in Orders.SellOrders)
                     {
-                        if (buyOrder.TypeId == sellOrder.TypeId && sellOrder.QtyAvailable * sellOrder.Volume >= shipSpace && sellOrder.QtyMinimum * sellOrder.Volume * sellOrder.Price <= maxPrice && sellOrder.Price < buyOrder.Price)
+                        if (buyOrder.TypeId == sellOrder.TypeId && sellOrder.QtyAvailable * sellOrder.Volume >= shipSpace && sellOrder.QtyMinimum * sellOrder.Price <= maxPrice && sellOrder.Price < buyOrder.Price)
                         {
                             if (JumpGraph.GetRoute(sellOrder.SolarsystemId, buyOrder.SolarsystemId, minSecurity).Jumps <= maxJumps)
                             {
