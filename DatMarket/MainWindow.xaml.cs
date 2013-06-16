@@ -27,6 +27,7 @@ namespace DatMarket
         public static MySqlConnection connectionBuy = new MySqlConnection(conStr);
         public static MySqlConnection connectionSell = new MySqlConnection(conStr);
     }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -42,6 +43,7 @@ namespace DatMarket
         public MainWindow()
         {
             InitializeComponent();
+            setupGUI();
 
 
             // Route Tester.
@@ -95,7 +97,10 @@ namespace DatMarket
 
         private void setupGUI()
         {
-
+            List<string> SystemList = new List<string>();
+            SystemList = mysql.getSolarSystems();
+            this.systemCombobox.ItemsSource = SystemList;
+    
         }
 
 

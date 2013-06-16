@@ -138,6 +138,33 @@ namespace DatMarket
             }
         }
 
+        public List<string> getSolarSystems()
+        {
+            List<string> solarsystemsList = new List<string>();
+            MySqlConnection connectionGUIInfo = new MySqlConnection(Orders.conStr);
+            connectionGUIInfo.Open();
+            try
+            {
+                string solarQuery = "SELECT solarsystem_name FROM eve_map_solarsystems;";
+                MySqlCommand cmd = new MySqlCommand(solarQuery, connectionGUIInfo);
+                cmd.CommandTimeout = 900;
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    solarsystemsList.Add(reader[0].ToString());
+                }
+
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return solarsystemsList;
+        }
+
         public int getItemCount(string item)
         {
 
