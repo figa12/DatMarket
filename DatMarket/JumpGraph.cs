@@ -86,7 +86,7 @@ namespace DatMarket
             connection.Open();
 
             // Sql Query to get info from the database and start the reader.
-            string cmdText = "SELECT solarsystemid,security FROM mapSolarSystems;";
+            string cmdText = "SELECT solarsystem_id,security FROM eve_map_solarsystems;";
             MySqlCommand cmd = new MySqlCommand(cmdText, connection);
             MySqlDataReader reader = cmd.ExecuteReader();
 
