@@ -17,13 +17,10 @@ namespace DatMarket
             {
                 /* 
                  * Vores forsøg der tager 4 år og en sommer:
-                 * 
-                 * SELECT sell_orders.* FROM sell_orders, eve_map_solarsystems AS map WHERE 
-                 * map.security > 0.9 AND map.solarsystem_id = sell_orders.solarsystem_id AND 
-                 * sell_orders.`price` < ANY (SELECT price FROM sell_orders WHERE sell_orders.type_id IN (SELECT type_id FROM buy_orders) AND sell_orders.`qty_avail` >= ANY (SELECT qty_avail FROM buy_orders WHERE type_id = sell_orders.type_id));
+                 * Indsæt input fra user i query.
                  */
-                string sql = "SELECT * FROM  `sell_orders`;";
-
+                
+                string sql = "SELECT sell_orders.* FROM sell_orders, eve_map_solarsystems AS map WHERE map.security > 0.5 AND map.solarsystem_id = sell_orders.solarsystem_id;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, Orders.connectionSell);
                 cmd.CommandTimeout = 900;
