@@ -13,7 +13,7 @@
             <ColumnDefinition Width="167"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="tLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Margin="0,0" TextWrapping="Wrap" Text="TextBox" IsReadOnly="True" RenderTransformOrigin="0.5,0.5" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+        <TextBox x:Name="tLog" HorizontalAlignment="Stretch" Margin="0,0,0,0" TextWrapping="Wrap" Text="TextBox" IsReadOnly="True" RenderTransformOrigin="0.5,0.5" Grid.Row="0" Grid.Column="1">
             <TextBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -23,10 +23,16 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <ProgressBar x:Name="progressBar" RenderTransformOrigin="0.498,1.636" Grid.Row="1" Grid.Column="1" Height="25" VerticalAlignment="Top" Margin="0,3,0,0"/>
-        <Label Content="SellOrders" Grid.Row="1"/>
-        <ComboBox x:Name="systemCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="157" Margin="0,42,0,0" IsReadOnly="False" IsEditable="True"/>
-        <Label Content="System" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
-        <TextBox x:Name="systemTextBox" HorizontalAlignment="Left" Height="23" Margin="0,69,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="157"/>
+        <ProgressBar x:Name="progressBar" RenderTransformOrigin="0.498,1.636" Grid.Row="1" Grid.Column="1" Height="25" VerticalAlignment="Top" Margin="0,3,0,0" ClipToBounds="True"/>
+        <Label Content="Orders" Grid.Row="1" Margin="10,0" Grid.Column="0"/>
+        <ComboBox x:Name="systemCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="134" Margin="10,41,0,0" IsReadOnly="False" IsEditable="True" IsTabStop="False" IsHitTestVisible="True" Initialized="systemCombobox_Initialized"/>
+        <Label Content="System" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
+        <Label Content="Cargo space" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
+        <TextBox x:Name="cargoTextBox" HorizontalAlignment="Left" Height="23" Margin="10,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132"/>
+        <Label Content="ISK" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
+        <TextBox x:Name="iskTextBox" HorizontalAlignment="Left" Height="23" Margin="10,197,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132"/>
+        <Button x:Name="findOrderButton" Content="Find Order" HorizontalAlignment="Left" Margin="10,416,0,10" Width="147" Click="findOrderButton_Click"/>
+        <Label Content="Max Jumps" HorizontalAlignment="Left" Margin="12,225,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
+        <ComboBox x:Name="maxJumpsCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="134" Margin="12,257,0,0" IsReadOnly="False" IsEditable="True" IsTabStop="False" IsHitTestVisible="True" Initialized="maxJumpsCombobox_Initialized"/>
     </Grid>
 </Window>

@@ -40,11 +40,10 @@ namespace DatMarket
         Mysql mysql = new Mysql();
         private int Counter = 0;
 
+
         public MainWindow()
         {
             InitializeComponent();
-            setupGUI();
-
 
             // Route Tester.
             //Route route = JumpGraph.GetRoute(30003498, 30000142, 1);
@@ -95,15 +94,45 @@ namespace DatMarket
             Counter += 1;
         }
 
-        private void setupGUI()
+        public string getSolarSystem()
         {
+            return this.systemCombobox.Text.ToString();
+        }
+
+        public double getISK()
+        {
+            return double.Parse(this.iskTextBox.Text.ToString());
+        }
+
+        public int getMaxJumps()
+        {
+            return int.Parse(this.maxJumpsCombobox.Text.ToString());
+        }
+
+        public double getCargo()
+        {
+            return double.Parse(this.cargoTextBox.Text.ToString());
+        }
+
+        private void systemCombobox_Initialized(object sender, EventArgs e)
+        {
+            //Solarsystem ComboBox
             List<string> SystemList = new List<string>();
             SystemList = mysql.getSolarSystems();
             this.systemCombobox.ItemsSource = SystemList;
-    
         }
 
+        private void maxJumpsCombobox_Initialized(object sender, EventArgs e)
+        {
+            List<int> maxJumps = new List<int>() {5,10,20,30};
+            this.maxJumpsCombobox.ItemsSource = maxJumps;
+        }
 
+        private void findOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            //trololololololo;
+        }
 
+        
     }
 }

@@ -145,7 +145,7 @@ namespace DatMarket
             connectionGUIInfo.Open();
             try
             {
-                string solarQuery = "SELECT solarsystem_name FROM eve_map_solarsystems;";
+                string solarQuery = "SELECT solarsystem_name FROM eve_map_solarsystems ;";
                 MySqlCommand cmd = new MySqlCommand(solarQuery, connectionGUIInfo);
                 cmd.CommandTimeout = 900;
                 MySqlDataReader reader = cmd.ExecuteReader();
@@ -154,14 +154,13 @@ namespace DatMarket
                 {
                     solarsystemsList.Add(reader[0].ToString());
                 }
-
                 reader.Close();
             }
             catch (Exception e)
             {
                 throw e;
             }
-
+            connectionGUIInfo.Close();
             return solarsystemsList;
         }
 
