@@ -25,7 +25,14 @@
         </TextBox>
         <ProgressBar x:Name="progressBar" RenderTransformOrigin="0.498,1.636" Grid.Row="1" Grid.Column="1" Height="25" VerticalAlignment="Top" Margin="0,3,0,0" ClipToBounds="True"/>
         <Label Content="Orders" Grid.Row="1" Margin="10,0" Grid.Column="0"/>
-        <ComboBox x:Name="systemCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="134" Margin="10,41,0,0" IsReadOnly="False" IsEditable="True" IsTabStop="False" IsHitTestVisible="True" Initialized="systemCombobox_Initialized"/>
+        <ComboBox x:Name="systemCombobox" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="134" Margin="10,41,0,0" IsReadOnly="False" IsEditable="True" IsTabStop="False" IsHitTestVisible="True" Initialized="systemCombobox_Initialized">
+        <ComboBox.ItemsPanel>
+            <ItemsPanelTemplate >
+                <VirtualizingStackPanel/>
+            </ItemsPanelTemplate>
+        </ComboBox.ItemsPanel>
+        </ComboBox>
+
         <Label Content="System" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
         <Label Content="Cargo space" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
         <TextBox x:Name="cargoTextBox" HorizontalAlignment="Left" Height="23" Margin="10,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132"/>
