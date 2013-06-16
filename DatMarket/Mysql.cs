@@ -18,9 +18,10 @@ namespace DatMarket
                 /* 
                  * Vores forsøg der tager 4 år og en sommer:
                  * Indsæt input fra user i query.
+                 * "SELECT sell_orders.* FROM sell_orders, eve_map_solarsystems AS map WHERE map.security > 0.5 AND map.solarsystem_id = sell_orders.solarsystem_id;"
                  */
-                
-                string sql = "SELECT sell_orders.* FROM sell_orders, eve_map_solarsystems AS map WHERE map.security > 0.5 AND map.solarsystem_id = sell_orders.solarsystem_id;";
+
+                string sql = "SELECT * FROM sell_orders;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, Orders.connectionSell);
                 cmd.CommandTimeout = 900;
