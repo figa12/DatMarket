@@ -169,6 +169,8 @@ namespace DatMarket
 
         public int getItemCount(string item)
         {
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
+            connection.Open();
 
             int toReturn = -1;
 
@@ -187,7 +189,7 @@ namespace DatMarket
 
                 if (sql != string.Empty)
                 {
-                    MySqlCommand cmd = new MySqlCommand(sql, Orders.connectionBuy);
+                    MySqlCommand cmd = new MySqlCommand(sql, connection);
                     MySqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
@@ -198,6 +200,7 @@ namespace DatMarket
 
                     reader.Close();
                 }
+                connection.Close();
             }
             catch (Exception e)
             {

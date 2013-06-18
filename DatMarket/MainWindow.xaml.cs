@@ -69,6 +69,11 @@ namespace DatMarket
 
         private void TOnElapsed(object sender, EventArgs elapsedEventArgs)
         {
+            sellOrderItems = mysql.getItemCount("sell_orders");
+            buyOrderItems = mysql.getItemCount("buy_orders");
+
+            progressBar.Value = (int)(((double)(Orders.SellOrders.Count + Orders.BuyOrders.Count) / (double)(sellOrderItems + buyOrderItems)) * 100);
+
             if (Orders.SellOrders.Count >= sellOrderItems && Orders.BuyOrders.Count >= buyOrderItems)
             {
                 Orders.connectionBuy.Close();
@@ -84,9 +89,7 @@ namespace DatMarket
                 t.Tick += EOnElapsed;
                 t.Start();
                 List<FoundItem> items = ItemFinder.itemListFinder(50, 5000, 0.5, 100000);
-
             }
-            progressBar.Value = (int)(((double)(Orders.SellOrders.Count + Orders.BuyOrders.Count) / (double)(sellOrderItems + buyOrderItems)) * 100);
         }
 
         private void EOnElapsed(object sender, EventArgs elapsedEventArgs)
