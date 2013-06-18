@@ -119,6 +119,7 @@ namespace DatMarket
             //Solarsystem ComboBox
             List<string> SystemList = new List<string>();
             SystemList = mysql.getSolarSystems();
+
             this.systemCombobox.ItemsSource = SystemList;
         }
 
