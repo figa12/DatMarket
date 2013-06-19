@@ -11,48 +11,50 @@ namespace DatMarket
 {
     public static class JumpGraph
     {
-        public static Route GetRoute(uint from, uint target, double minSecurity)
+        public static Route GetRoute(uint from, uint target)
         {
-            // Get the graph from the database.
-            BidirectionalGraph<uint, Edge<uint>> graph = GetGraph(minSecurity);
-
             // Calculate the shortest route with a constant length.
-            var dijkstra = graph.ShortestPathsDijkstra((e => 1), from);
+            var algorithm = Orders.Graph.ShortestPathsDijkstra((e => 1), from);
+            //var algorithm = Orders.Graph.ShortestPathsAStar(e => 1, e => 1, from);
 
             // Query path for given vertices.
             IEnumerable<Edge<uint>> path;
 
             // Count the amount of jumps.
-            int jumpCounter = 0;
+            int jumpCounter = 9001;
             double lowestSec = 1;
 
             // If a path was found, continue.
-            if (dijkstra(target, out path))
+            if (algorithm(target, out path))
+            {
+                jumpCounter = 0;
                 foreach (var edge in path)
                 {
                     jumpCounter++;
                 }
-
+            }
             return new Route(jumpCounter, lowestSec);
         }
 
-        // Creates a graph from a database.
-        private static BidirectionalGraph<uint, Edge<uint>> GetGraph(double minSecurity)
+        public static void GetGraph()
         {
             MySqlConnection connection = new MySqlConnection(Orders.conStr);
             connection.Open();
+
+            // Create an empty graph and an empty edge list.
+            Orders.Graph = new BidirectionalGraph<uint, Edge<uint>>();
+            // (This is because edges cannot be made to vertexes that doesn't exist.)
+            List<Edge<uint>> tempEdges = new List<Edge<uint>>();
+
+            foreach (var solarSystem in Orders.SolarSystemList)
+            {
+                Orders.allowedSolarSystems.Add(solarSystem.SolarSystemID);
+            }
 
             // Sql Query to get info from the database and start the reader.
             string cmdText = "SELECT from_solarsystem_id,to_solarsystem_id FROM eve_map_solarsystem_jumps;";
             MySqlCommand cmd = new MySqlCommand(cmdText, connection);
             MySqlDataReader reader = cmd.ExecuteReader();
-
-            // Create an empty graph and an empty edge list.
-            BidirectionalGraph<uint, Edge<uint>> graph = new BidirectionalGraph<uint, Edge<uint>>();
-            // (This is because edges cannot be made to vertexes that doesn't exist.)
-            List<Edge<uint>> tempEdges = new List<Edge<uint>>();
-
-            List<uint> allowedSecurityList = JumpGraph.allowedSecurityList(minSecurity);
 
             // Read all database info into the variables.
             while (reader.Read())
@@ -60,52 +62,85 @@ namespace DatMarket
                 uint tempVertex = uint.Parse(reader[0].ToString());
                 uint tempEdge = uint.Parse(reader[1].ToString());
 
-                if (!graph.Vertices.Contains(tempVertex))
+                if (!Orders.Graph.Vertices.Contains(tempVertex) && Orders.allowedSolarSystems.Contains(tempVertex))
                 {
-                    graph.AddVertex(tempVertex);
+                    Orders.Graph.AddVertex(tempVertex);
                 }
 
-                if (allowedSecurityList.Contains(tempEdge))
+                if (Orders.allowedSolarSystems.Contains(tempEdge) && Orders.allowedSolarSystems.Contains(tempVertex))
                     tempEdges.Add(new Edge<uint>(tempVertex, tempEdge));
             }
+
+            connection.Close();
 
             // Add the edges to the graph.
             foreach (var tempEdge in tempEdges)
             {
-                graph.AddEdge(tempEdge);
+                Orders.Graph.AddEdge(tempEdge);
             }
 
-            connection.Close();
-
-            return graph;
+            return;
         }
 
-        private static List<uint> allowedSecurityList(double minSecurity)
+        public static void CreateSolarSystems(double minSecurity)
         {
             MySqlConnection connection = new MySqlConnection(Orders.conStr);
-            connection.Open();
 
-            // Sql Query to get info from the database and start the reader.
-            string cmdText = "SELECT solarsystem_id,security FROM eve_map_solarsystems;";
-            MySqlCommand cmd = new MySqlCommand(cmdText, connection);
-            MySqlDataReader reader = cmd.ExecuteReader();
-
-            List<uint> tempSecurityList = new List<uint>();
-
-            // Read all database info into the variables.
-            while (reader.Read())
+            try
             {
-                uint tempSolarSystemID = uint.Parse(reader[0].ToString());
-                double tempSystemSecurityLevel = double.Parse(reader[1].ToString());
+                connection.Open();
 
-                if (tempSystemSecurityLevel >= minSecurity)
-                    tempSecurityList.Add(tempSolarSystemID);
+                // Sql Query to get info from the database and start the reader.
+                string cmdText = "SELECT solarsystem_id,security FROM eve_map_solarsystems;";
+                MySqlCommand cmd = new MySqlCommand(cmdText, connection);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                Orders.SolarSystemList = new List<SolarSystem>();
+
+                // Read all database info into the variables.
+                while (reader.Read())
+                {
+                    uint SolarSystemID = uint.Parse(reader[0].ToString());
+                    double SystemSecurityLevel = double.Parse(reader[1].ToString());
+
+                    if (SystemSecurityLevel >= minSecurity)
+                        Orders.SolarSystemList.Add(new SolarSystem(SolarSystemID, SystemSecurityLevel));
+                }
+            }
+            catch
+            {
             }
 
             connection.Close();
 
-            return tempSecurityList;
+            GetGraph();
+
+            return;
         }
+    }
+
+    public class SolarRoute
+    {
+        public uint FromSolarSystemID;
+        public uint ToSolarSystemID;
+
+        public SolarRoute(uint fromSolarSystemID, uint toSolarSystemID)
+        {
+            FromSolarSystemID = fromSolarSystemID;
+            ToSolarSystemID = fromSolarSystemID;
+        }
+    }
+
+    public class SolarSystem
+    {
+        public SolarSystem(uint solarSystemID, double security)
+        {
+            SolarSystemID = solarSystemID;
+            Security = security;
+        }
+
+        public uint SolarSystemID { get; set; }
+        public double Security { get; set; }
     }
 
     public class Route

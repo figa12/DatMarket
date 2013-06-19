@@ -12,6 +12,8 @@ namespace DatMarket
     {
         public void getDataSell()
         {
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
+            connection.Open();
 
             try
             {
@@ -23,7 +25,7 @@ namespace DatMarket
 
                 string sql = "SELECT * FROM sell_orders;";
 
-                MySqlCommand cmd = new MySqlCommand(sql, Orders.connectionSell);
+                MySqlCommand cmd = new MySqlCommand(sql, connection);
                 cmd.CommandTimeout = 900;
                 MySqlDataReader reader = cmd.ExecuteReader();
                 Orders.SellOrders = new List<Order>();
@@ -56,6 +58,9 @@ namespace DatMarket
             {
                 throw e;
             }
+            connection.Close();
+
+            
         }
 
         private double  getVolume(List<VolumeHolder> volumeHolders, uint typeID)
@@ -97,11 +102,13 @@ namespace DatMarket
 
         public void getDataBuy()
         {
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
+            connection.Open();
             try
             {
                 string sql = "SELECT * FROM  `buy_orders`;";
 
-                MySqlCommand cmd = new MySqlCommand(sql, Orders.connectionBuy);
+                MySqlCommand cmd = new MySqlCommand(sql, connection);
                 cmd.CommandTimeout = 900;
                 MySqlDataReader reader = cmd.ExecuteReader();
                 Orders.BuyOrders = new List<Order>();
@@ -134,6 +141,7 @@ namespace DatMarket
             {
                 throw e;
             }
+            connection.Close();
         }
 
         public List<string> getSolarSystems()
@@ -143,7 +151,7 @@ namespace DatMarket
             connectionGUIInfo.Open();
             try
             {
-                string solarQuery = "SELECT solarsystem_name FROM eve_map_solarsystems ;";
+                string solarQuery = "SELECT solarsystem_name FROM eve_map_solarsystems;";
                 MySqlCommand cmd = new MySqlCommand(solarQuery, connectionGUIInfo);
                 cmd.CommandTimeout = 900;
                 MySqlDataReader reader = cmd.ExecuteReader();
@@ -164,6 +172,8 @@ namespace DatMarket
 
         public int getItemCount(string item)
         {
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
+            connection.Open();
 
             int toReturn = -1;
 
@@ -182,7 +192,7 @@ namespace DatMarket
 
                 if (sql != string.Empty)
                 {
-                    MySqlCommand cmd = new MySqlCommand(sql, Orders.connectionBuy);
+                    MySqlCommand cmd = new MySqlCommand(sql, connection);
                     MySqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
@@ -198,6 +208,7 @@ namespace DatMarket
             {
                 throw e;
             }
+            connection.Close();
             return toReturn;
         }
     }

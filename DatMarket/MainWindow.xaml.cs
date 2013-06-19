@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,25 +15,40 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
+using MS.Internal.Xml.XPath;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using QuickGraph;
 
 namespace DatMarket
 {
+    public interface IWindowInterface
+    {
+        void appendLog(String txt);
+    }
+
     public static class Orders
     {
         public static List<Order> SellOrders = new List<Order>();
         public static List<Order> BuyOrders = new List<Order>();
         public static string conStr = "server=78.129.218.62;user=eve;database=eve;port=3306;password=eve;";
-        public static MySqlConnection connectionBuy = new MySqlConnection(conStr);
-        public static MySqlConnection connectionSell = new MySqlConnection(conStr);
+        public static List<SolarSystem> SolarSystemList = new List<SolarSystem>();
+        public static List<SolarRoute> SolarRoutes = new List<SolarRoute>(); 
+        public static BidirectionalGraph<uint, Edge<uint>> Graph = new BidirectionalGraph<uint, Edge<uint>>();
+        public static List<uint> allowedSolarSystems = new List<uint>();
     }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : IWindowInterface
     {
+
+        public void appendLog(String txt)
+        {
+            tLog.AppendText(txt);
+        }
+
         DispatcherTimer t = new DispatcherTimer();
         DispatcherTimer e = new DispatcherTimer();
         private int sellOrderItems;
@@ -47,15 +63,17 @@ namespace DatMarket
 
             // Route Tester.
             //Route route = JumpGraph.GetRoute(30003498, 30000142, 1);
-            Orders.connectionBuy.Open();
-            Orders.connectionSell.Open();
             sellOrderItems = mysql.getItemCount("sell_orders");
             buyOrderItems = mysql.getItemCount("buy_orders");
+
 
             Thread sellThread = new Thread((mysql.getDataSell));
             sellThread.Start();
             Thread buyThread = new Thread((mysql.getDataBuy));
             buyThread.Start();
+            
+            // Tager fra et security og op efter
+            JumpGraph.CreateSolarSystems(0.5);
 
             t.Interval = new TimeSpan(0, 0, 1);
             t.Tick += TOnElapsed;
@@ -71,19 +89,29 @@ namespace DatMarket
         {
             if (Orders.SellOrders.Count >= sellOrderItems && Orders.BuyOrders.Count >= buyOrderItems)
             {
-                Orders.connectionBuy.Close();
-                Orders.connectionSell.Close();
                 t.Stop();
                 tLog.AppendText(string.Format("Finished loading: {0} sell orders and {1} buy orders.", sellOrderItems, buyOrderItems));
                 progressBar.Visibility = Visibility.Hidden;
 
 
                 // Det meste af det her er bare for at tælle hvor lang tid det tager at udføre. Det er ligegyldigt i sidste ende.
-                Counter = 0;
-                t.Interval = new TimeSpan(0, 0, 1);
-                t.Tick += EOnElapsed;
-                t.Start();
-                List<FoundItem> items = ItemFinder.itemListFinder(50, 5000, 0.5, 100000);
+                //Counter = 0;
+                //e.Interval = new TimeSpan(0, 0, 1);
+                //e.Tick += EOnElapsed;
+                //e.Start();
+                List<FoundItem> items = ItemFinder.itemListFinder(10, 5000, 0.5, 100000);
+                tLog.AppendText("DONE MOTHERFUCKER");
+
+                ObservableCollection<FoundItem> observableItems = new ObservableCollection<FoundItem>();
+
+                //foreach (var foundItem in items)
+                //{
+                //    ListView.Items.Add(TypeID = foundItem.BuyOrder.TypeId);
+                //}
+                ListView.ItemsSource = items;
+
+                //ListView.ItemsSource = observableItems;
+                //ListBox.
 
             }
             progressBar.Value = (int)(((double)(Orders.SellOrders.Count + Orders.BuyOrders.Count) / (double)(sellOrderItems + buyOrderItems)) * 100);

@@ -13,7 +13,7 @@
             <ColumnDefinition Width="167"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="tLog" HorizontalAlignment="Stretch" Margin="0,0,0,0" TextWrapping="Wrap" Text="TextBox" IsReadOnly="True" RenderTransformOrigin="0.5,0.5" Grid.Row="0" Grid.Column="1">
+        <TextBox x:Name="tLog" HorizontalAlignment="Stretch" Margin="0,397,0,0" TextWrapping="Wrap" Text="TextBox" IsReadOnly="True" RenderTransformOrigin="0.5,0.5" Grid.Row="0" Grid.Column="1">
             <TextBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -41,5 +41,17 @@
         <Button x:Name="findOrderButton" Content="Find Order" HorizontalAlignment="Left" Margin="10,416,0,10" Width="147" Click="findOrderButton_Click"/>
         <Label Content="Max Jumps" HorizontalAlignment="Left" Margin="12,225,0,0" VerticalAlignment="Top" Width="132" Height="27"/>
         <ComboBox x:Name="maxJumpsCombobox" VerticalAlignment="Top" Height="22" HorizontalAlignment="Left" Width="134" Margin="12,257,0,0" IsReadOnly="False" IsEditable="True" IsTabStop="False" IsHitTestVisible="True" Initialized="maxJumpsCombobox_Initialized"/>
+        <ListView x:Name="ListView" Grid.Column="1" HorizontalAlignment="Left" Height="383" Margin="10,10,0,0" VerticalAlignment="Top" Width="608">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="TypeID" DisplayMemberBinding="{Binding BuyOrder.TypeId}"/>
+                    <GridViewColumn Header="From" DisplayMemberBinding="{Binding BuyOrder.StationId}"/>
+                    <GridViewColumn Header="To" DisplayMemberBinding="{Binding SellOrder.StationId}"/>
+                    <GridViewColumn Header="Profit" DisplayMemberBinding="{Binding ProfitPercent}"/>
+                    <GridViewColumn Header="Jumps" DisplayMemberBinding="{Binding Jumps}"/>
+                    <GridViewColumn Header="Profit Points" DisplayMemberBinding="{Binding ProfitPoints}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
