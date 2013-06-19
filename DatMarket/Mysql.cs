@@ -63,7 +63,7 @@ namespace DatMarket
             
         }
 
-        private double  getVolume(List<VolumeHolder> volumeHolders, uint typeID)
+        private double getVolume(List<VolumeHolder> volumeHolders, uint typeID)
         {
             double result = 0;
 
@@ -87,7 +87,7 @@ namespace DatMarket
             string cmdText = string.Format("SELECT typeid,volume FROM invTypes");
             MySqlCommand cmd = new MySqlCommand(cmdText, connection);
             MySqlDataReader reader = cmd.ExecuteReader();
-            
+
             List<VolumeHolder> volumeHolders = new List<VolumeHolder>();
 
             // Read all database info into the variables.
@@ -158,7 +158,12 @@ namespace DatMarket
 
                 while (reader.Read())
                 {
-                    solarsystemsList.Add(reader[0].ToString());
+                    string tempRead = reader[0].ToString();
+                    int x;
+
+                    // Sort out wormholes.
+                    if (tempRead.IndexOf("J") != 0 || !int.TryParse(tempRead.Substring(1), out x))
+                        solarsystemsList.Add(tempRead);
                 }
                 reader.Close();
             }
@@ -203,6 +208,7 @@ namespace DatMarket
 
                     reader.Close();
                 }
+                connection.Close();
             }
             catch (Exception e)
             {
@@ -216,7 +222,7 @@ namespace DatMarket
     class VolumeHolder
     {
         public uint TypeID { get; set; }
-        public double Volume{ get; set; }
+        public double Volume { get; set; }
 
         public VolumeHolder(uint typeID, double volume)
         {
