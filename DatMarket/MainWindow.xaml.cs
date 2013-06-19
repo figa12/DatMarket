@@ -36,6 +36,9 @@ namespace DatMarket
         public static List<SolarRoute> SolarRoutes = new List<SolarRoute>(); 
         public static BidirectionalGraph<uint, Edge<uint>> Graph = new BidirectionalGraph<uint, Edge<uint>>();
         public static List<uint> allowedSolarSystems = new List<uint>();
+        public static List<Item> Items = new List<Item>();
+        public static List<Station> Stations = new List<Station>();
+
     }
 
     /// <summary>
@@ -65,7 +68,13 @@ namespace DatMarket
             //Route route = JumpGraph.GetRoute(30003498, 30000142, 1);
             sellOrderItems = mysql.getItemCount("sell_orders");
             buyOrderItems = mysql.getItemCount("buy_orders");
+            sellOrderItems = 50000;
+            buyOrderItems = 50000;
 
+            mysql.GetAllItems();
+            mysql.GetAllStations();
+
+            List<Item> test = Orders.Items;
 
             Thread sellThread = new Thread((mysql.getDataSell));
             sellThread.Start();

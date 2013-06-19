@@ -44,12 +44,16 @@
         <ListView x:Name="ListView" Grid.Column="1" HorizontalAlignment="Left" Height="383" Margin="10,10,0,0" VerticalAlignment="Top" Width="608">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="TypeID" DisplayMemberBinding="{Binding BuyOrder.TypeId}"/>
-                    <GridViewColumn Header="From" DisplayMemberBinding="{Binding BuyOrder.StationId}"/>
-                    <GridViewColumn Header="To" DisplayMemberBinding="{Binding SellOrder.StationId}"/>
+                    <GridViewColumn Header="Item" DisplayMemberBinding="{Binding BuyOrder.ItemName}"/>
+                    <GridViewColumn Header="From Solar System" DisplayMemberBinding="{Binding BuyOrder.SolarSystemName}"/>
+                    <GridViewColumn Header="To Solar System" DisplayMemberBinding="{Binding SellOrder.SolarSystemName}"/>
+                    <GridViewColumn Header="From Station" DisplayMemberBinding="{Binding BuyOrder.StationName}"/>
+                    <GridViewColumn Header="To Station" DisplayMemberBinding="{Binding SellOrder.StationName}"/>
                     <GridViewColumn Header="Profit" DisplayMemberBinding="{Binding ProfitPercent}"/>
                     <GridViewColumn Header="Jumps" DisplayMemberBinding="{Binding Jumps}"/>
                     <GridViewColumn Header="Profit Points" DisplayMemberBinding="{Binding ProfitPoints}"/>
+                    <GridViewColumn Header="Buy Order Volume" DisplayMemberBinding="{Binding BuyOrder.TotalVolume}"/>
+                    <GridViewColumn Header="Sell Order Volume" DisplayMemberBinding="{Binding SellOrder.TotalVolume}"/>
                 </GridView>
             </ListView.View>
         </ListView>

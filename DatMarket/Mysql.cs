@@ -23,7 +23,7 @@ namespace DatMarket
                  * "SELECT sell_orders.* FROM sell_orders, eve_map_solarsystems AS map WHERE map.security > 0.5 AND map.solarsystem_id = sell_orders.solarsystem_id;"
                  */
 
-                string sql = "SELECT * FROM sell_orders;";
+                string sql = "SELECT * FROM sell_orders limit 50000;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, connection);
                 cmd.CommandTimeout = 900;
@@ -60,7 +60,7 @@ namespace DatMarket
             }
             connection.Close();
 
-            
+
         }
 
         private double getVolume(List<VolumeHolder> volumeHolders, uint typeID)
@@ -106,7 +106,7 @@ namespace DatMarket
             connection.Open();
             try
             {
-                string sql = "SELECT * FROM  `buy_orders`;";
+                string sql = "SELECT * FROM  `buy_orders` limit 50000;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, connection);
                 cmd.CommandTimeout = 900;
@@ -216,6 +216,105 @@ namespace DatMarket
             }
             connection.Close();
             return toReturn;
+        }
+
+        public void GetAllItems()
+        {
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
+
+            try
+            {
+                connection.Open();
+
+                string sql = "SELECT * FROM  `invTypes`;";
+
+                MySqlCommand cmd = new MySqlCommand(sql, connection);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string description = reader[3].ToString();
+
+                    int graphicID = 0;
+                    int raceID = 0;
+                    int marketGroupID = 0;
+                    int iconID = 0;
+
+                    int.TryParse(reader[4].ToString(), out graphicID);
+                    int.TryParse(reader[10].ToString(), out raceID);
+                    int.TryParse(reader[13].ToString(), out marketGroupID);
+                    int.TryParse(reader[15].ToString(), out iconID);
+
+
+                    Orders.Items.Add(new Item(
+                        int.Parse(reader[0].ToString()),
+                        int.Parse(reader[1].ToString()),
+                        reader[2].ToString(),
+                        description,
+                        graphicID,
+                        double.Parse(reader[5].ToString()),
+                        double.Parse(reader[6].ToString()),
+                        double.Parse(reader[7].ToString()),
+                        double.Parse(reader[8].ToString()),
+                        int.Parse(reader[9].ToString()),
+                        raceID,
+                        decimal.Parse(reader[11].ToString()),
+                        int.Parse(reader[12].ToString()),
+                        marketGroupID,
+                        double.Parse(reader[14].ToString()),
+                        iconID));
+                }
+
+                reader.Close();
+                connection.Close();
+            }
+
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return;
+        }
+
+
+        public void GetAllStations()
+        {
+            MySqlConnection connection = new MySqlConnection(Orders.conStr);
+
+            try
+            {
+                connection.Open();
+
+                string sql = "SELECT * FROM  `eve_sta_stations`;";
+
+                MySqlCommand cmd = new MySqlCommand(sql, connection);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    Orders.Stations.Add(new Station(
+                        int.Parse(reader[0].ToString()),
+                        int.Parse(reader[1].ToString()),
+                        reader[2].ToString(),
+                        int.Parse(reader[3].ToString()),
+                        reader[4].ToString(),
+                        int.Parse(reader[5].ToString()),
+                        reader[6].ToString(),
+                        int.Parse(reader[7].ToString()),
+                        reader[8].ToString()));
+                }
+
+                reader.Close();
+                connection.Close();
+            }
+
+            catch (Exception)
+            {
+            }
+
+            return;
         }
     }
 

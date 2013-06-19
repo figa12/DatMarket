@@ -88,6 +88,26 @@ namespace DatMarket
             set { _volume = value; }
         }
 
+        public double TotalVolume
+        {
+            get { return (Volume * QtyAvailable); }
+        }
+
+        public string ItemName
+        {
+            get { return Orders.Items.Find(x => x.TypeID == _typeId).TypeName; }
+        }
+
+        public string StationName
+        {
+            get { return Orders.Stations.Find(x => x.Station_ID == _stationId).Station_Name; }
+        }
+
+        public string SolarSystemName
+        {
+            get { return Orders.Stations.Find(x => x.SolarSystem_ID == _solarsystemId).SolarSystem_Name; }
+        }
+
         public Order(uint orderId, uint typeId, uint stationId, uint solarsystemId, uint regionId, float price, int distance, uint qtyTotal, uint qtyAvailable, uint qtyMinimum, DateTime dateIssued, DateTime dateExpires, DateTime dateCreated, double volume)
         {
             _orderId = orderId;

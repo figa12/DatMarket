@@ -36,7 +36,7 @@ namespace DatMarket
                                                    {
 
                                                        buyCounter++;
-                                                       if (buyOrder.QtyAvailable * buyOrder.Volume >= shipSpace &&
+                                                       if (buyOrder.TotalVolume >= shipSpace &&
                                                            buyOrder.QtyMinimum * buyOrder.Volume <= shipSpace &&
                                                            buyOrder.Price * buyOrder.QtyMinimum <= maxPrice &&
                                                            Orders.allowedSolarSystems.Contains(buyOrder.SolarsystemId))
@@ -62,11 +62,11 @@ namespace DatMarket
 
             foreach (var sellOrder in Orders.SellOrders)
             {
-                if (buyOrder.TypeId == sellOrder.TypeId && 
-                    sellOrder.QtyAvailable * sellOrder.Volume >= state.ShipSpace && 
+                if (buyOrder.TypeId == sellOrder.TypeId &&
+                    sellOrder.TotalVolume >= state.ShipSpace && 
                     sellOrder.QtyMinimum * sellOrder.Price <= state.MaxPrice && 
                     sellOrder.Price < buyOrder.Price && 
-                    ((buyOrder.Price / sellOrder.Price) * 100) > 400  && 
+                    ((buyOrder.Price / sellOrder.Price) * 100) > 100  && 
                     Orders.allowedSolarSystems.Contains(sellOrder.SolarsystemId))
                 {
                     /*  ATTENTION:
@@ -100,14 +100,15 @@ namespace DatMarket
 
         public double ProfitPercent
         {
-            get { return Math.Round((BuyOrder.Price / SellOrder.Price) * 100, 2); }
+            get { return Math.Round((BuyOrder.Price / SellOrder.Price) * 100 - 100, 2); }
         }
 
         public double ProfitPoints
         {
             get { return Math.Round(ProfitPercent / Jumps, 2); }
         }
-
+        
+        
         public Order BuyOrder { get; set; }
 
         public Order SellOrder { get; set; }
