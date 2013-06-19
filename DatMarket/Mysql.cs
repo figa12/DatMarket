@@ -23,7 +23,7 @@ namespace DatMarket
                  * "SELECT sell_orders.* FROM sell_orders, eve_map_solarsystems AS map WHERE map.security > 0.5 AND map.solarsystem_id = sell_orders.solarsystem_id;"
                  */
 
-                string sql = "SELECT * FROM sell_orders limit 50000;";
+                string sql = "SELECT * FROM sell_orders;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, connection);
                 cmd.CommandTimeout = 900;
@@ -106,7 +106,7 @@ namespace DatMarket
             connection.Open();
             try
             {
-                string sql = "SELECT * FROM  `buy_orders` limit 50000;";
+                string sql = "SELECT * FROM  `buy_orders`;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, connection);
                 cmd.CommandTimeout = 900;

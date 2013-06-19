@@ -68,13 +68,9 @@ namespace DatMarket
             //Route route = JumpGraph.GetRoute(30003498, 30000142, 1);
             sellOrderItems = mysql.getItemCount("sell_orders");
             buyOrderItems = mysql.getItemCount("buy_orders");
-            sellOrderItems = 50000;
-            buyOrderItems = 50000;
 
             mysql.GetAllItems();
             mysql.GetAllStations();
-
-            List<Item> test = Orders.Items;
 
             Thread sellThread = new Thread((mysql.getDataSell));
             sellThread.Start();
