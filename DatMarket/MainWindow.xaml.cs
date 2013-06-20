@@ -33,7 +33,7 @@ namespace DatMarket
         public static List<Order> BuyOrders = new List<Order>();
         public static string conStr = "server=78.129.218.62;user=eve;database=eve;port=3306;password=eve;";
         public static List<SolarSystem> SolarSystemList = new List<SolarSystem>();
-        public static List<SolarRoute> SolarRoutes = new List<SolarRoute>(); 
+        public static List<SolarRoute> SolarRoutes = new List<SolarRoute>();
         public static BidirectionalGraph<uint, Edge<uint>> Graph = new BidirectionalGraph<uint, Edge<uint>>();
         public static List<uint> allowedSolarSystems = new List<uint>();
         public static List<Item> Items = new List<Item>();
@@ -53,41 +53,37 @@ namespace DatMarket
         }
 
         DispatcherTimer t = new DispatcherTimer();
-        DispatcherTimer e = new DispatcherTimer();
         private int sellOrderItems;
         private int buyOrderItems;
         Mysql mysql = new Mysql();
-        private int Counter = 0;
-
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Route Tester.
-            //Route route = JumpGraph.GetRoute(30003498, 30000142, 1);
+            // Laver alle lister. Tager minSecurity.
+            CreateLists(0.5);
+
+            Thread sellThread = new Thread((mysql.getDataSell));
+            sellThread.Start();
+            Thread buyThread = new Thread((mysql.getDataBuy));
+            buyThread.Start();
+
+            t.Interval = new TimeSpan(0, 0, 1);
+            t.Tick += TOnElapsed;
+            t.Start();
+        }
+
+        private void CreateLists(double minSecurity)
+        {
             sellOrderItems = mysql.getItemCount("sell_orders");
             buyOrderItems = mysql.getItemCount("buy_orders");
 
             mysql.GetAllItems();
             mysql.GetAllStations();
 
-            Thread sellThread = new Thread((mysql.getDataSell));
-            sellThread.Start();
-            Thread buyThread = new Thread((mysql.getDataBuy));
-            buyThread.Start();
-            
             // Tager fra et security og op efter
-            JumpGraph.CreateSolarSystems(0.5);
-
-            t.Interval = new TimeSpan(0, 0, 1);
-            t.Tick += TOnElapsed;
-            t.Start();
-
-            if (t.IsEnabled == false)
-            {
-
-            }
+            JumpGraph.CreateSolarSystems(minSecurity);
         }
 
         private void TOnElapsed(object sender, EventArgs elapsedEventArgs)
@@ -98,53 +94,51 @@ namespace DatMarket
                 tLog.AppendText(string.Format("Finished loading: {0} sell orders and {1} buy orders.", sellOrderItems, buyOrderItems));
                 progressBar.Visibility = Visibility.Hidden;
 
-
-                // Det meste af det her er bare for at tælle hvor lang tid det tager at udføre. Det er ligegyldigt i sidste ende.
-                //Counter = 0;
-                //e.Interval = new TimeSpan(0, 0, 1);
-                //e.Tick += EOnElapsed;
-                //e.Start();
                 List<FoundItem> items = ItemFinder.itemListFinder(10, 5000, 0.5, 100000);
                 tLog.AppendText("DONE MOTHERFUCKER");
 
-                ObservableCollection<FoundItem> observableItems = new ObservableCollection<FoundItem>();
-
-                //foreach (var foundItem in items)
-                //{
-                //    ListView.Items.Add(TypeID = foundItem.BuyOrder.TypeId);
-                //}
                 ListView.ItemsSource = items;
-
-                //ListView.ItemsSource = observableItems;
-                //ListBox.
 
             }
             progressBar.Value = (int)(((double)(Orders.SellOrders.Count + Orders.BuyOrders.Count) / (double)(sellOrderItems + buyOrderItems)) * 100);
         }
 
-        private void EOnElapsed(object sender, EventArgs elapsedEventArgs)
-        {
-            Counter += 1;
-        }
-
         public string getSolarSystem()
         {
-            return this.systemCombobox.Text.ToString();
+            return systemCombobox.Text;
         }
 
         public double getISK()
         {
-            return double.Parse(this.iskTextBox.Text.ToString());
+            double x = 0;
+            if (!double.TryParse(iskTextBox.Text, out x))
+            {
+                MessageBox.Show(x + " is not a valid number for ISK.");
+            }
+
+            return x;
         }
 
         public int getMaxJumps()
         {
-            return int.Parse(this.maxJumpsCombobox.Text.ToString());
+            int x = 0;
+            if (!int.TryParse(maxJumpsCombobox.Text, out x))
+            {
+                MessageBox.Show(x + " is not a valid number for max jumps.");
+            }
+
+            return x;
         }
 
         public double getCargo()
         {
-            return double.Parse(this.cargoTextBox.Text.ToString());
+            double x = 0;
+            if (!double.TryParse(cargoTextBox.Text, out x))
+            {
+                MessageBox.Show(x + " is not a valid number for Cargo Hold.");
+            }
+
+            return x;
         }
 
         private void systemCombobox_Initialized(object sender, EventArgs e)
@@ -157,7 +151,7 @@ namespace DatMarket
 
         private void maxJumpsCombobox_Initialized(object sender, EventArgs e)
         {
-            List<int> maxJumps = new List<int>() {5,10,20,30};
+            List<int> maxJumps = new List<int>() { 5, 10, 20, 30 };
             this.maxJumpsCombobox.ItemsSource = maxJumps;
         }
 
@@ -166,6 +160,6 @@ namespace DatMarket
             //trololololololo;
         }
 
-        
+
     }
 }
